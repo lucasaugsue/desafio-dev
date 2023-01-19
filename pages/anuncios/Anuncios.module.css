@@ -1,0 +1,38 @@
+.container{
+    padding: 10vh 4vw;
+}
+
+.headGrid{
+    margin-top: 2vh; 
+}
+
+.titleTable{
+    font-size: 32;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.buttonHead{
+    padding: 10px;
+    border: 8px;
+}
+
+.table{
+    overflow-x: auto;
+    margin-top: 1vh;
+}
+
+.headCell{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.bodyCell{
+    font-size: 18px;
+    color: black;
+}
+
+.iconTable{
+    cursor: pointer;
+    color: black;
+}

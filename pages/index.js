@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title></title>
+        <title>Anúncios</title>
         <link rel="icon" href="/car-solid.png" />
       </Head>
 
