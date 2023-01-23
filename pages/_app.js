@@ -1,25 +1,36 @@
 import React from 'react';
-import { useEffect, useState } from 'react'
-import { NotificationsProvider } from "@mantine/notifications";
-import { BreakpointProvider } from 'react-socks';
 import "./_global.scss";
+import { useEffect, useState } from 'react'
+import { BreakpointProvider } from 'react-socks';
+import ClientContext from '../src/contexts/ClientContext';
+import serverRequest from '../src/service/RestClient';
+import { NotificationsProvider } from "@mantine/notifications";
 
 function MyApp({ Component, pageProps }) {
   const [showChild, setShowChild] = useState(false)
+
+  const clientContext = React.useMemo(() => ({
+    apiRequest: (
+      method, 
+      url, 
+      params, 
+      downloadFile,
+      {contentType = undefined} = {}) => serverRequest({method, url, params, downloadFile, contentType})
+  }), [])
 
   useEffect(() => {
     setShowChild(true)
   }, [])
 
-  if (!showChild) {
-    return null
-  }
+  if (!showChild) return null
 
   return (
     <BreakpointProvider>
-      <NotificationsProvider>
-        <Component {...pageProps} />
-      </NotificationsProvider>
+      <ClientContext.Provider value={clientContext}>
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
+      </ClientContext.Provider>
     </BreakpointProvider>
   )
 }
