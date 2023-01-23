@@ -11,16 +11,33 @@ import EditIcon from "@material-ui/icons/Edit";
 import TablePaginationActions from '../../src/components/TablePaginationActions';
 import ClientContext from "../../src/contexts/ClientContext";
 import { Suspense } from 'react';
+import AnuncioModal from "./AnuncioModal"
 import ConfirmDelete from "../../src/components/ConfirmDelete";
 import { showNotification } from "@mantine/notifications";
 
 export default function Anuncios() {
     const { apiRequest } = React.useContext(ClientContext);
-	
+    
+    // get donos
+    const [donos, setDonos] = React.useState([]);
+
+    const getDonos = () => {
+        setLoading(true)
+        apiRequest("GET", "/donos/")
+        .then((res) => {
+            setDonos(res)
+            setLoading(false)
+        })
+        .catch((err) => {
+            setLoading(false)
+            showNotification({message: err.message, color: 'red', autoClose: true})
+        });
+    }
+
+    // get anuncios
     const [loading, setLoading] = React.useState(false);
     const [anuncios, setAnuncios] = React.useState([]);
 
-    // get anuncios
     const getAnuncios = () => {
         setLoading(true)
         apiRequest("GET", "/anuncios/")
@@ -35,8 +52,51 @@ export default function Anuncios() {
     }
 
     React.useEffect(() => {
+        getDonos()
         getAnuncios()
     }, []);
+
+    // create & edit anuncio
+    const [edit, setEdit] = React.useState(false);
+    const [currentAnuncio, setCurrentAnuncio] = React.useState(null);
+
+    const createAnuncio = () => {
+        try{
+            if(!currentAnuncio.nome) throw new Error("É necessário o nome!")
+            if(!currentAnuncio.marca) throw new Error("É necessário a marca!")
+            if(!currentAnuncio.ano_de_fabricacao) throw new Error("É necessário o ano de fabricação!")
+            if(!currentAnuncio.descricao) throw new Error("É necessário a descrição!")
+    
+            setLoading(true)
+            apiRequest("POST", "/anuncios/create", currentAnuncio)
+            .then((res) => {
+                getAnuncios()
+                showNotification({message: res, color: 'green', autoClose: true})
+            })
+            .catch((err) => {
+                setLoading(false)
+                showNotification({message: err.message, color: 'red', autoClose: true})
+            });
+
+        }catch(err){
+            showNotification({message: err.message, color: 'red', autoClose: true})
+        }
+    }
+
+    const editAnuncio = () => {
+        setLoading(true)
+        apiRequest("PATCH", `/anuncios/edit/${currentAnuncio.id}`, currentAnuncio)
+        .then((res) => {
+            getAnuncios()
+            setEdit(false)
+            setCurrentAnuncio(null)
+            showNotification({message: res, color: 'green', autoClose: true})
+        })
+        .catch((err) => {
+            setLoading(false)
+            showNotification({message: err.message, color: 'red', autoClose: true})
+        });
+    }
 
     // delete
     const [anuncioDelete, setAnuncioDelete] = React.useState(null);
@@ -72,6 +132,8 @@ export default function Anuncios() {
                     container 
                     spacing={2}
                     direction="row"
+                    justifyContent="center"
+                    alignItems="center"
                     className={styles.headGrid} 
                 >
                     <Grid item xs={12} sm={12} md={6}>
@@ -86,7 +148,7 @@ export default function Anuncios() {
                             color="primary" 
                             variant="contained"
                             className={styles.buttonHead}
-                            onClick={() =>  console.log('todo esse botao')}
+                            onClick={() =>  setCurrentAnuncio({})}
                         > {"adicionar aqui"} </Button>
                     </Grid>
                 </Grid>
@@ -97,7 +159,7 @@ export default function Anuncios() {
             <Table className={styles.table}>
                 <TableHead>
                     <TableRow>
-                        {["ID", "Nome", "Marca", "Editar", "Deletar"]
+                        {["ID", "Nome", "Marca", "Descrição", "Editar", "Deletar"]
                         .map((title, index) => (
                             <TableCell 
                                 key={`${title};;${index}`}
@@ -106,56 +168,66 @@ export default function Anuncios() {
                         ))}
                     </TableRow>
                 </TableHead>
-                    {<Suspense fallback={<div>Loading...</div>}>
-                        {!loading ? (
-                            <TableBody>
-                                {(rowsPerPage > 0
-                                    ? anuncios.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    : anuncios
-                                ).map((item, index) => (
-                                    <TableRow index={index} key={`${item.id};;${index}`}>
-                                        <TableCell className={styles.bodyCell}>
-                                            {item.id}
-                                        </TableCell>
-                                        <TableCell className={styles.bodyCell}>
-                                            {item.nome}
-                                        </TableCell>
-                                        <TableCell className={styles.bodyCell}>
-                                            {item.marca}
-                                        </TableCell>
-                                        <TableCell className={styles.bodyCell}>
-                                            <Tooltip title="Editar">
-                                                <IconButton onClick={() => setAnuncioDelete(item)} >
-                                                    <EditIcon 
-                                                        fontSize="medium" 
-                                                        className={styles.iconTable}
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </TableCell>
-                                        <TableCell className={styles.bodyCell}>
-                                            <Tooltip title="Deletar">
-                                                <IconButton onClick={() => setAnuncioDelete(item)}>
-                                                    <DeleteIcon
-                                                        ontSize="medium" 
-                                                        className={styles.iconTable}
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        ) : (
-                            <TableBody>
-                                <TableRow>
+                {<Suspense fallback={<div>Loading...</div>}>
+                    {!loading ? (
+                        <TableBody>
+                            {(rowsPerPage > 0
+                                ? anuncios.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                : anuncios
+                            ).map((item, index) => (
+                                <TableRow index={index} key={`${item.id};;${index}`}>
                                     <TableCell className={styles.bodyCell}>
-                                        Anuncios...
+                                        {item.id}
+                                    </TableCell>
+                                    <TableCell className={styles.bodyCell}>
+                                        {item.nome}
+                                    </TableCell>
+                                    <TableCell className={styles.bodyCell}>
+                                        {item.marca}
+                                    </TableCell>
+                                    <TableCell className={styles.bodyCell}>
+                                        {item.descricao}
+                                    </TableCell>
+                                    <TableCell className={styles.bodyCell}>
+                                        <Tooltip title="Editar">
+                                            <IconButton onClick={() => {
+                                                    setEdit(true) 
+                                                    setCurrentAnuncio({
+                                                        ...item,
+                                                        donos_anuncios: item.donos_anuncios.map(item => item.donos), 
+                                                    })
+                                                }}
+                                            >
+                                                <EditIcon 
+                                                    fontSize="medium" 
+                                                    className={styles.iconTable}
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell className={styles.bodyCell}>
+                                        <Tooltip title="Deletar">
+                                            <IconButton onClick={() => setAnuncioDelete(item)}>
+                                                <DeleteIcon
+                                                    ontSize="medium" 
+                                                    className={styles.iconTable}
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
                                     </TableCell>
                                 </TableRow>
-                            </TableBody>
-                        )}
-                    </Suspense>}
+                            ))}
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className={styles.bodyCell}>
+                                    Anuncios...
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    )}
+                </Suspense>}
                 <TableFooter>
                     <TablePagination
                         colSpan={6}
@@ -180,6 +252,17 @@ export default function Anuncios() {
             setOpen={setAnuncioDelete}
             title={"Remover Anuncio"}
             removeFunction={() => {deleteAnuncio()}}
+        />
+
+        <AnuncioModal
+            donos={donos}
+            open={!!currentAnuncio}
+            setOpen={setCurrentAnuncio}
+            currentAnuncio={currentAnuncio}
+
+            buttonActionText={edit ? "Editar" : "Criar"}
+            title={edit ? "Editar Anuncio" : "Criar Anuncio"}
+            action={edit ? () => editAnuncio() : () => createAnuncio()}
         />
     </div>
 }
