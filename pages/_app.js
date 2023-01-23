@@ -1,10 +1,23 @@
 import React from 'react';
 import "./_global.scss";
+import { ThemeProvider } from '@material-ui/styles';
+import { createTheme } from '@material-ui/core';
 import { useEffect, useState } from 'react'
 import { BreakpointProvider } from 'react-socks';
 import ClientContext from '../src/contexts/ClientContext';
 import serverRequest from '../src/service/RestClient';
 import { NotificationsProvider } from "@mantine/notifications";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#FB8501'
+    },
+    secondary: {
+      main: '#FFFFFF',
+    },
+  },
+})
 
 function MyApp({ Component, pageProps }) {
   const [showChild, setShowChild] = useState(false)
@@ -26,11 +39,13 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <BreakpointProvider>
-      <ClientContext.Provider value={clientContext}>
-        <NotificationsProvider>
-          <Component {...pageProps} />
-        </NotificationsProvider>
-      </ClientContext.Provider>
+      <ThemeProvider theme={theme}>
+        <ClientContext.Provider value={clientContext}>
+          <NotificationsProvider>
+            <Component {...pageProps} />
+          </NotificationsProvider>
+        </ClientContext.Provider>
+      </ThemeProvider>
     </BreakpointProvider>
   )
 }

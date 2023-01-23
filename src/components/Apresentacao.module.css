@@ -25,7 +25,10 @@ section.header{
     font-weight: bold;
     font-size: 22px;
     max-width: 8vw;
-    background-color: #FB8501;
+}
+
+.textButton{
+    color: white
 }
 
 .main{
@@ -67,7 +70,7 @@ section.header{
         background-size: contain;
         background-position-x: 10vw;
         background-attachment: scroll;
-        padding: 25vh 25vw;
+        padding: 20vh 25vw;
         top: 0;
         right: 0;
         left: 0;

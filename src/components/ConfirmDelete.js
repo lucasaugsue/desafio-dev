@@ -1,5 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from '@material-ui/core';
 import React from "react";
+import styles from './ConfirmDelete.module.css';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -14,28 +15,31 @@ export default function ConfirmDelete({
 		<div>
 			<Dialog
 				open={open}
+                maxWidth="lg"
 				onClose={handleClose}
 				TransitionComponent={Transition}
 			>
-				<DialogTitle style={{fontSize: 26}}>
+				<DialogTitle className={styles.dialogTitle}>
 					{title}
 				</DialogTitle>
 				<DialogContent>
-					<Typography style={{ fontSize: 20 }}>
+					<Typography className={styles.dialogText}>
 						Tem certeza que deseja excluir?
 					</Typography>
 				</DialogContent>
 				<DialogActions>
-					<Grid container style={{marginTop:'1%', margin:"2%"}} spacing={1}>
+					<Grid 
+						container 
+						spacing={1}
+						style={{margin: '1vh'}}
+					>
                         <Grid item xs={12} md={6}>
                             <Button 
                                 fullWidth
                                 color="secondary"
                                 variant="contained"
                                 onClick={() => handleClose()} 
-                            >
-								Não
-                            </Button>
+                            > Não </Button>
                         </Grid>
 						<Grid item xs={12} md={6}>
                             <Button 
@@ -46,9 +50,7 @@ export default function ConfirmDelete({
 									handleClose()
 									removeFunction()
 								}} 
-                            >
-                                Sim
-                            </Button>
+                            > Sim </Button>
                         </Grid>
                     </Grid>
 				</DialogActions>

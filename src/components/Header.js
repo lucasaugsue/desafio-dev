@@ -69,17 +69,17 @@ export default function Header({transparent : transparentProps = true}){
                     className={styles.list} 
                 >
                     {listItens.map((i, index) => 
-                    <ListItemButton 
-                        sx={{ pl: 3 }}
-                        key={`${i.id};;${index}`}
-                        onClick={(e) => {
-                            setOpen(false)
-                            e.preventDefault();
-                            router.push(`${i.section}`)
-                        }}
-                    >
+                        <ListItemButton 
+                            sx={{ pl: 3 }}
+                            key={`${i.id};;${index}`}
+                            onClick={(e) => {
+                                setOpen(false)
+                                e.preventDefault();
+                                router.push(`${i.section}`)
+                            }}
+                        >
                         <ListItemText primary={i.title} />
-                    </ListItemButton>)}
+                        </ListItemButton>)}
                 </List>
             </Collapse>
         </div>

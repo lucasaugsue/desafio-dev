@@ -12,12 +12,8 @@
     font-family: sans-serif;
 }
 
-.buttonHead{
-    font-family: 'Antonio', sans-serif;
+.buttonText{
     color: white;
-    font-weight: bold;
-    font-size: 24px;
-    background-color: #FB8501;
 }
 
 .table{

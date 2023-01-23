@@ -2,6 +2,7 @@ import React from "react";
 import moment from 'moment'
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from "@material-ui/icons/Close";
+import styles from './AnuncioModal.module.css';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slide, Typography, TextField, Card, FormControl, Select, MenuItem } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -33,7 +34,7 @@ export default function ConfirmDelete({
 				onClose={handleClose}
 				TransitionComponent={Transition}
 			>
-				<DialogTitle style={{fontSize: 26}}>
+				<DialogTitle className={styles.dialogTitle}>
 					{title}
 				</DialogTitle>
 				<DialogContent>
@@ -101,13 +102,7 @@ export default function ConfirmDelete({
                         </Grid>
 
                         <Grid item sm={12} md={12} lg={12}>
-                            <Typography 
-                                variant="body"
-                                style={{
-                                    color:"gray",
-                                    marginLeft: 10,
-                                    marginBottom: 20, 
-                                }}
+                            <Typography className={styles.dialogText}
                             > Insira os donos </Typography> 
                         </Grid>
                         <Grid item sm={12} md={4} lg={4}>
@@ -133,6 +128,7 @@ export default function ConfirmDelete({
                         <Grid item sm={12} md={1} lg={1}>
                             <Button
                                 variant="contained"
+                                className={styles.addButton}
                                 onClick={() => {
                                     if(!{...selectValue}.id) return null;
 
@@ -154,16 +150,10 @@ export default function ConfirmDelete({
                                     
                                     setSelectValue(null)
                                 }}
-                                style={{
-                                    borderRadius: 8, 
-                                    marginBottom: 5,
-                                    backGroundColor: "#5F5F5F",
-                                    padding: '8px 0px 8px 0px',
-                                }}
                             >
                                 <AddIcon 
                                     fontSize="medium"
-                                    style={{color:"#555555"}}
+                                    className={styles.icon}
                                 />
                             </Button>
                         </Grid>
@@ -171,13 +161,7 @@ export default function ConfirmDelete({
                         <Grid item sm={12} md={12} lg={12}>
                             <Card 
                                 variant="outlined"
-                                style={{
-                                    margin: 5,
-                                    borderRadius: 8,
-                                    padding: "20px 20px 20px 20px",
-                                    overflow:'scroll',
-                                    maxHeight:400
-                                }}
+                                className={styles.card}
                             >
                                 <Grid
                                     container
@@ -193,11 +177,7 @@ export default function ConfirmDelete({
                                         >
                                             <Card 
                                                 variant="elevation"
-                                                style={{
-                                                    borderRadius: 15,
-                                                    backgroundColor: "#eeeeee",
-                                                    padding: "5px 5px 5px 5px",
-                                                }}
+                                                className={styles.cardItem}
                                              >
                                                 <Grid 
                                                     container
@@ -206,15 +186,12 @@ export default function ConfirmDelete({
                                                 >
                                                     <Grid item>
                                                         <CloseIcon
+                                                            className={styles.closeIcon}
                                                             onClick={() => {
                                                                 setOpen(data => ({
                                                                     ...data,
                                                                     donos_anuncios: data.donos_anuncios.filter(i => i.id !== item.id) 
                                                                 }))
-                                                            }}
-                                                            style={{
-                                                                fontSize:20,
-                                                                color: "#515A5A", 
                                                             }}
                                                         />
                                                     </Grid>
@@ -223,8 +200,7 @@ export default function ConfirmDelete({
                                                     </Grid>
                                                 </Grid>
                                             </Card>
-                                        </Grid>
-                                        )
+                                        </Grid>)
                                     )}
                                 </Grid>
                             </Card>
@@ -232,16 +208,18 @@ export default function ConfirmDelete({
                     </Grid>
 				</DialogContent>
 				<DialogActions>
-					<Grid container style={{marginTop:'1%', margin:"2%"}} spacing={1}>
+					<Grid 
+                        container 
+                        spacing={1}
+						style={{margin: '1vh'}}
+                    >
                         <Grid item xs={12} md={6}>
                             <Button 
                                 fullWidth
-                                color="secondary"
-                                variant="contained"
+                                color="primary"
+                                variant="outlined"
                                 onClick={() => handleClose()} 
-                            >
-								Cancelar
-                            </Button>
+                            > Cancelar </Button>
                         </Grid>
 						<Grid item xs={12} md={6}>
                             <Button 
@@ -252,7 +230,7 @@ export default function ConfirmDelete({
 									handleClose()
 									action()
 								}} 
-                            > {buttonActionText} </Button>
+                            > <div className={styles.textButton}> {buttonActionText} </div> </Button>
                         </Grid>
                     </Grid>
 				</DialogActions>

@@ -1,0 +1,43 @@
+.dialogTitle {
+    font-size: 26px;
+}
+
+.dialogText {
+    color: gray;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.textButton {
+    color: white;
+}
+
+.addButton {
+    border-radius: 8px;
+    margin-bottom: 5px;
+    background-color: #5F5F5F;
+    padding: 8px 0px
+}
+
+.icon {
+    color: #555555;
+}
+
+.card {
+    margin: 5px;
+    border-radius: 8px;
+    padding: 20px;
+    overflow: scroll;
+    max-height: 400px;
+}
+
+.cardItem {
+    border-radius: 15px;
+    background-color: #eeeeee;
+    padding: 5px;
+}
+
+.closeIcon {
+    font-size: 20px;
+    color: #515A5A;
+}

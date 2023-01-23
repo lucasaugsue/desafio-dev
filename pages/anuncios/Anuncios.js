@@ -147,9 +147,8 @@ export default function Anuncios() {
                             fullWidth
                             color="primary" 
                             variant="contained"
-                            className={styles.buttonHead}
                             onClick={() =>  setCurrentAnuncio({})}
-                        > {"adicionar aqui"} </Button>
+                        > <div className={styles.buttonText}> {"adicionar aqui"} </div> </Button>
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -209,7 +208,7 @@ export default function Anuncios() {
                                         <Tooltip title="Deletar">
                                             <IconButton onClick={() => setAnuncioDelete(item)}>
                                                 <DeleteIcon
-                                                    ontSize="medium" 
+                                                    fontSize="medium" 
                                                     className={styles.iconTable}
                                                 />
                                             </IconButton>
